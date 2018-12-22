@@ -16,6 +16,10 @@ const users = [
   {
     login: 'lol',
     password: '12345',
+  },
+  {
+    login: 1,
+    password: 1,
   }
 ];
 
@@ -29,11 +33,14 @@ app.get('/src/dist/bundle.js.map', (req, res) => {
   res.sendFile(__dirname + '/dist/bundle.js.map');
 })
 
-/*app.get('/authorization', (req, res) => {
-  res.render('registration');
-})
 app.post('/authorization', (req, res) => {
   console.log(req.body);
+  users.forEach((user) => {
+    if ((req.body.login == user.login) && (req.body.password == user.password)) {
+      console.log('Авторизован');
+      res.send({signed: true});
+    }
+  })
   res.redirect('/');
 })
 
@@ -48,7 +55,7 @@ app.post('/registration', (req, res) => {
   users.push(newUser);
   console.log(users);
   res.redirect('/');
-})*/
+})
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Сервер запущен');
