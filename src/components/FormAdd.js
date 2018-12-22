@@ -20,7 +20,7 @@ class FormAdd extends Component {
     e.preventDefault();
     const { login,password } = this.state;
     $.ajax({
-      url: "/authorization",
+      url: "/authentication",
       type: 'POST',
       data: {
         login: login,

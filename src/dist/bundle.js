@@ -34289,7 +34289,7 @@ function (_Component) {
           login = _this$state.login,
           password = _this$state.password;
       jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
-        url: "/authorization",
+        url: "/authentication",
         type: 'POST',
         data: {
           login: login,

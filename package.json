@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode development",
-    "start": "node ./src/server.js",
-    "startDev": "nodemon ./src./server.js",
+    "start": "nodemon ./src/server.js",
+    "startDev": "nodemon ./src./serverDev.js",
     "dev": "npm run build && nodemon ./src/server.js",
     "watch": "webpack --mode development --watch",
     "startW": "webpack-dev-server --mode development --open"
