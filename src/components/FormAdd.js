@@ -70,7 +70,7 @@ class FormAdd extends Component {
       return(
         <form>
           <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
-          <input onChange={this.onInputChange} id="password" placeholder="password" value={password} /><br/>
+          <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
           <button onClick={this.onAutBtnClick}>Войти</button><button onClick={this.onRegAutBtnClick}>Зарегестрироваться</button>
         </form>
       )
@@ -78,7 +78,7 @@ class FormAdd extends Component {
       return(
       <form>
         <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
-        <input onChange={this.onInputChange} id="password" placeholder="password" value={password} /><br/>
+        <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
         <input onChange={this.onInputChange} id="email" placeholder="email" value={email} /><br/>
         <button onClick={this.onRegBtnClick}>Зарегистрироваться</button><button onClick={this.onRegAutBtnClick}>Есть аккаунт? Войти</button>
       </form>

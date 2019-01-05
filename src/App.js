@@ -1,54 +1,25 @@
 import React, { Component } from 'react';
-import { FormAdd } from './components/FormAdd.js';
-import { Post } from './components/Post.js';
+import { Route,Switch } from 'react-router-dom';
 
-const data = [
-  {
-    id: 1,
-    header: 'Это заголовок',
-    content: 'А это текст поста'
-  },
+import { Nav } from './components/Nav';
+import { FormAdd } from './components/FormAdd';
+import { Posts } from './components/Posts';
+import { FullPost } from './components/FullPost';
 
-  {
-    id: 2,
-    header: 'Это заголовок другого поста',
-    content: 'А это уже целый контент'
-  }
-]
+import $ from 'jquery';
 
 class App extends Component {
-  state = {
-    data: data,
-  }
-
-  renderPosts = () => {
-      const { data } = this.state;
-      let posts = null;
-
-      if (data.length) {
-        posts = data.map((item) => {
-          return(
-            <Post key={item.id} data={item}/>
-          )
-        })
-      } else {
-        posts = <p>Постов нет.</p>
-      }
-
-      return posts;
-    }
 
   render() {
     return(
       <div>
-        <div>
-          {
-            this.renderPosts()
-          }
-        </div>
-        <div>
-          <FormAdd />
-        </div>
+        <Nav />
+        <Switch>
+          <Route exact path="/" component={ (props) => <Posts {...props}/>}/>
+          <Route path="/post_:id" component={ (props) => <FullPost {...props} /> }/>
+          <Route component={ () => <p>404</p> }/>
+        </Switch>
+        <FormAdd />
       </div>
     )
   }
