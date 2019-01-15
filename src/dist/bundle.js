@@ -38572,9 +38572,39 @@ function (_Component) {
       login: '',
       password: '',
       email: '',
-      gender: '',
-      aut: true,
-      signed: false
+      profileName: '',
+      authorizationForm: true,
+      authorized: false,
+      isLoading: false
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentWillMount", function () {
+      _this.setState({
+        isLoading: true
+      });
+
+      jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
+        url: '/checkSession',
+        type: 'GET',
+        success: function success(res) {
+          if (res.authorized) {
+            _this.setState({
+              authorized: true,
+              profileName: res.profileName,
+              isLoading: false
+            });
+
+            console.log('Хэй, сессия запущена');
+          } else {
+            _this.setState({
+              authorized: false,
+              isLoading: false
+            });
+
+            console.log('Сессии нет');
+          }
+        }
+      });
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onInputChange", function (e) {
@@ -38585,55 +38615,73 @@ function (_Component) {
       _this.setState(_defineProperty({}, id, value));
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onAutBtnClick", function (e) {
-      e.preventDefault();
-      var _this$state = _this.state,
-          login = _this$state.login,
-          password = _this$state.password;
-      jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
-        url: "/authentication",
-        type: 'POST',
-        data: {
-          login: login,
-          password: password
-        },
-        success: function success(res) {
-          console.log(res);
-
-          if (res.signed) {
-            _this.setState({
-              signed: res.signed
-            });
-          }
-        }
-      });
-    });
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onRegBtnClick", function (e) {
-      e.preventDefault();
-      var _this$state2 = _this.state,
-          login = _this$state2.login,
-          password = _this$state2.password,
-          email = _this$state2.email;
-      jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
-        url: "/registration",
-        type: 'POST',
-        data: {
-          login: login,
-          password: password,
-          email: email
-        },
-        success: function success(res) {
-          console.log(res);
-        }
-      });
-    });
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onRegAutBtnClick", function (e) {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onFormModeHandle", function (e) {
       e.preventDefault();
 
       _this.setState({
-        aut: !_this.state.aut
+        authorizationForm: !_this.state.authorizationForm
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onSignInBtnClick", function (e) {
+      e.preventDefault();
+      var _this$state = _this.state,
+          login = _this$state.login,
+          password = _this$state.password,
+          email = _this$state.email;
+
+      if (login && password && email) {
+        jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
+          url: "/sign?name=".concat(login, "&&password=").concat(password, "&&email=").concat(email),
+          type: 'POST'
+        });
+      } else {
+        alert('Поля должны быть заполнены');
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onLoginBtnClick", function (e) {
+      e.preventDefault();
+      var _this$state2 = _this.state,
+          login = _this$state2.login,
+          password = _this$state2.password;
+
+      if (login && password) {
+        jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
+          url: "/login?name=".concat(login, "&&password=").concat(password),
+          type: 'POST',
+          success: function success(res) {
+            if (res.authorized) {
+              _this.setState({
+                authorized: true,
+                profileName: res.profileName
+              });
+
+              console.log('Успешная авторизация');
+            } else {
+              _this.setState({
+                authorized: false
+              });
+
+              alert('Введены неверные данные');
+              console.log('Вход не произведен');
+            }
+          }
+        });
+      } else {
+        alert('Поля должны быть заполнены');
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onLogoutBtnClick", function () {
+      jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
+        url: '/logout',
+        type: 'GET',
+        success: function success(res) {
+          _this.setState({
+            authorized: false
+          });
+        }
       });
     });
 
@@ -38644,56 +38692,137 @@ function (_Component) {
     key: "render",
     value: function render() {
       var _this$state3 = this.state,
+          isLoading = _this$state3.isLoading,
           login = _this$state3.login,
           password = _this$state3.password,
           email = _this$state3.email,
-          gender = _this$state3.gender,
-          aut = _this$state3.aut,
-          signed = _this$state3.signed;
+          profileName = _this$state3.profileName,
+          authorizationForm = _this$state3.authorizationForm,
+          authorized = _this$state3.authorized;
 
-      if (signed) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u041F\u0440\u0438\u0432\u0435\u0442, ", login, "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "\u0412\u044B\u0439\u0442\u0438"));
-      } else if (aut) {
+      if (isLoading) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."));
+      } else if (authorized) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u041F\u0440\u0438\u0432\u0435\u0442, ", profileName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.onLogoutBtnClick
+        }, "\u0412\u044B\u0439\u0442\u0438"));
+      } else if (authorizationForm) {
+        return (//авторизация
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            onChange: this.onInputChange,
+            id: "login",
+            placeholder: "login"
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            onChange: this.onInputChange,
+            id: "password",
+            placeholder: "password"
+          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            onClick: this.onLoginBtnClick
+          }, "\u0412\u043E\u0439\u0442\u0438"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            onClick: this.onFormModeHandle
+          }, "\u0417\u0430\u0440\u0435\u0433\u0435\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"))
+        );
+      } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           onChange: this.onInputChange,
           id: "login",
-          placeholder: "login",
-          value: login
+          placeholder: "login"
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           onChange: this.onInputChange,
           id: "password",
-          type: "password",
-          placeholder: "password",
-          value: password
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.onAutBtnClick
-        }, "\u0412\u043E\u0439\u0442\u0438"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.onRegAutBtnClick
-        }, "\u0417\u0430\u0440\u0435\u0433\u0435\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"));
-      } else if (!aut) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          onChange: this.onInputChange,
-          id: "login",
-          placeholder: "login",
-          value: login
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          onChange: this.onInputChange,
-          id: "password",
-          type: "password",
-          placeholder: "password",
-          value: password
+          placeholder: "password"
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           onChange: this.onInputChange,
           id: "email",
-          placeholder: "email",
-          value: email
+          placeholder: "email"
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.onRegBtnClick
-        }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.onRegAutBtnClick
+          onClick: this.onSignInBtnClick
+        }, "\u0417\u0430\u0440\u0435\u0433\u0435\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.onFormModeHandle
         }, "\u0415\u0441\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442? \u0412\u043E\u0439\u0442\u0438"));
       }
     }
+    /*state = {
+      login: '',
+      password: '',
+      email: '',
+      gender: '',
+      aut: true,
+      signed: false,
+    }*/
+
+    /*onInputChange = (e) => {
+      const { id,value } = e.currentTarget;
+      this.setState({ [id]: value });
+    }
+     onAutBtnClick = (e) => {
+      e.preventDefault();
+      const { login,password } = this.state;
+      $.ajax({
+        url: "/authentication",
+        type: 'POST',
+        data: {
+          login: login,
+          password: password,
+        },
+        success: (res) => {
+          console.log(res);
+          if (res.signed) {
+            this.setState({signed: res.signed});
+          }
+        }
+      })
+    }
+     onRegBtnClick = (e) => {
+      e.preventDefault();
+      const { login,password,email } = this.state;
+      $.ajax({
+        url: "/registration",
+        type: 'POST',
+        data: {
+          login: login,
+          password: password,
+          email: email,
+        },
+        success: (res) => {
+          console.log(res);
+        }
+      })
+    }
+     onRegAutBtnClick = (e) => {
+      e.preventDefault();
+      this.setState({ aut: !this.state.aut });
+    }*/
+
+    /*render() {
+      const { login,password,email,gender,aut,signed } = this.state;
+        if (signed) {
+          return (
+            <div>
+              <p>Привет, {login}.</p>
+              <button>Выйти</button>
+            </div>
+          )
+      } else if (aut) {
+        return(
+          <form>
+            <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
+            <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
+            <button onClick={this.onAutBtnClick}>Войти</button><button onClick={this.onRegAutBtnClick}>Зарегестрироваться</button>
+          </form>
+        )
+      } else if (!aut) {
+        return(
+        <form>
+          <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
+          <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
+          <input onChange={this.onInputChange} id="email" placeholder="email" value={email} /><br/>
+          <button onClick={this.onRegBtnClick}>Зарегистрироваться</button><button onClick={this.onRegAutBtnClick}>Есть аккаунт? Войти</button>
+        </form>
+      )
+    }
+    }*/
+
   }]);
 
   return FormAdd;
