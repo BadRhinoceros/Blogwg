@@ -38,15 +38,20 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.3",
+    "connect-mongodb-session": "^2.0.6",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "jquery": "^3.3.1",
     "mongodb": "^3.1.10",
+    "mongoose": "^5.4.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "save": "^2.3.3"
   }
 }
