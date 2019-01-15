@@ -12,7 +12,7 @@ class App extends Component {
 
   render() {
     return(
-      <div>
+      <React.Fragment>
         <Nav />
         <Switch>
           <Route exact path="/" component={ (props) => <Posts {...props}/>}/>
@@ -20,7 +20,7 @@ class App extends Component {
           <Route component={ () => <p>404</p> }/>
         </Switch>
         <FormAdd />
-      </div>
+      </React.Fragment>
     )
   }
 }

@@ -86,6 +86,21 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/styles/header.css":
+/*!*********************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/styles/header.css ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
+// Module
+exports.push([module.i, ".header a {\r\n  text-decoration: none;\r\n  color: white;\r\n}\r\n\r\n. header a:visited {\r\n  color: white;\r\n}\r\n\r\n.header {\r\n  height: 85px;\r\n  background-color: #27e7a1;\r\n}\r\n\r\n.header-content {\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: inherit;\r\n  width: 1100px;\r\n  margin: 0 auto;\r\n}\r\n\r\n.logo {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  height: inherit;\r\n  width: 220px;\r\n  font-family: ALeo;\r\n  font-size: 28px;\r\n  font-weight: 800;\r\n  color: white;\r\n}\r\n\r\n.nav {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  width: 600px;\r\n  height: inherit;\r\n}\r\n\r\n.nav-list {\r\n  display: inline-table;\r\n  font-family: Courier New, monospace;\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  color: white;\r\n}\r\n\r\n.nav-list li {\r\n  display: inline-block;\r\n}\r\n\r\n.nav-list li {\r\n  margin-left: 75px;\r\n}\r\n\r\n.nav-list li:first-child {\r\n  margin-left: 10px;\r\n}\r\n\r\n.lk-b {\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  width: 280px;\r\n  height: inherit;\r\n  /* border: 1px solid blue; */\r\n}\r\n\r\n.search-block {\r\n  /* border: 1px solid red; */\r\n}\r\n\r\n.user-avatar-block {\r\n  margin-left: 30px;\r\n  /* border: 1px solid yellow; */\r\n}\r\n\r\n.search-block input {\r\n  border-radius: 5px;\r\n \tborder-color: #27e7a1;\r\n}\r\n\r\n.user-avatar {\r\n  display: block;\r\n  width: 60px;\r\n  height: 60px;\r\n  background-color: #E7EAE9;\r\n  border-radius: 50%;\r\n}\r\n", ""]);
+
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js!./src/styles/index.css":
 /*!********************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./src/styles/index.css ***!
@@ -38472,7 +38487,7 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Nav__WEBPACK_IMPORTED_MODULE_2__["Nav"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Nav__WEBPACK_IMPORTED_MODULE_2__["Nav"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
         exact: true,
         path: "/",
         component: function component(props) {
@@ -38811,6 +38826,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles/header.css */ "./src/styles/header.css");
+/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_styles_header_css__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38832,6 +38849,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Nav =
 /*#__PURE__*/
 function (_Component) {
@@ -38846,11 +38864,30 @@ function (_Component) {
   _createClass(Nav, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/profilelist"
-      }, "\u041B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
+        className: "header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "header-content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "logo"
+      }, "Fresh Mind."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+        className: "nav"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "nav-list"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/"
-      }, "\u041B\u0435\u043D\u0442\u0430 \u043F\u043E\u0441\u0442\u043E\u0432"));
+      }, "\u0413\u043B\u0430\u0432\u043D\u0430\u044F")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u041D\u043E\u0432\u043E\u0441\u0442\u0438"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u0411\u043B\u043E\u0433\u0438"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "lk-b"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "search-block"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        placeholder: "\u041F\u043E\u0438\u0441\u043A"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "user-avatar-block"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "user-avatar"
+      })))));
     }
   }]);
 
@@ -39079,6 +39116,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_App_js__WEBPACK_IMPORTED_MODULE_3__["default"], null)), document.getElementById('root'));
+
+/***/ }),
+
+/***/ "./src/styles/header.css":
+/*!*******************************!*\
+  !*** ./src/styles/header.css ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!./header.css */ "./node_modules/css-loader/dist/cjs.js!./src/styles/header.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
 
 /***/ }),
 
