@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode development",
+    "build": "webpack --mode development --history-api-fallback",
     "start": "nodemon ./src/server.js",
-    "startDev": "nodemon ./src./serverDev.js",
-    "dev": "npm run build && nodemon ./src/server.js",
+    "startDev": "nodemon ./src/serverDev.js",
+    "dev": "npm run build && nodemon ./src/serverDev.js",
     "watch": "webpack --mode development --watch",
     "startW": "webpack-dev-server --mode development --open"
   },
@@ -49,6 +49,8 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
