@@ -95,7 +95,7 @@
 
 exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".header a {\r\n  text-decoration: none;\r\n  color: white;\r\n}\r\n\r\n. header a:visited {\r\n  color: white;\r\n}\r\n\r\n.header {\r\n  height: 85px;\r\n  background-color: #27e7a1;\r\n}\r\n\r\n.header-content {\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: inherit;\r\n  width: 1100px;\r\n  margin: 0 auto;\r\n}\r\n\r\n.logo {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  height: inherit;\r\n  width: 220px;\r\n  font-family: ALeo;\r\n  font-size: 28px;\r\n  font-weight: 800;\r\n  color: white;\r\n}\r\n\r\n.nav {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  width: 600px;\r\n  height: inherit;\r\n}\r\n\r\n.nav-list {\r\n  display: inline-table;\r\n  font-family: Courier New, monospace;\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  color: white;\r\n}\r\n\r\n.nav-list li {\r\n  display: inline-block;\r\n}\r\n\r\n.nav-list li {\r\n  margin-left: 75px;\r\n}\r\n\r\n.nav-list li:first-child {\r\n  margin-left: 10px;\r\n}\r\n\r\n.lk-b {\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  width: 280px;\r\n  height: inherit;\r\n  /* border: 1px solid blue; */\r\n}\r\n\r\n.search-block {\r\n  /* border: 1px solid red; */\r\n}\r\n\r\n.user-avatar-block {\r\n  margin-left: 30px;\r\n  /* border: 1px solid yellow; */\r\n}\r\n\r\n.search-block input {\r\n  border-radius: 5px;\r\n \tborder-color: #27e7a1;\r\n}\r\n\r\n.user-avatar {\r\n  display: block;\r\n  width: 60px;\r\n  height: 60px;\r\n  background-color: #E7EAE9;\r\n  border-radius: 50%;\r\n}\r\n", ""]);
+exports.push([module.i, ".header a {\n  text-decoration: none;\n  color: white;\n}\n\n. header a:visited {\n  color: white;\n}\n\n.header {\n  height: 85px;\n  background-color: #27e7a1;\n}\n\n.header-content {\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  align-items: center;\n  height: inherit;\n  width: 1100px;\n  margin: 0 auto;\n}\n\n.logo {\n  display: inline-flex;\n  align-items: center;\n  height: inherit;\n  width: 220px;\n  font-family: ALeo;\n  font-size: 28px;\n  font-weight: 800;\n  color: white;\n}\n\n.nav {\n  display: inline-flex;\n  align-items: center;\n  width: 600px;\n  height: inherit;\n}\n\n.nav-list {\n  display: inline-table;\n  font-family: Courier New, monospace;\n  font-size: 15px;\n  font-weight: 800;\n  color: white;\n}\n\n.nav-list li {\n  display: inline-block;\n}\n\n.nav-list li {\n  margin-left: 75px;\n}\n\n.nav-list li:first-child {\n  margin-left: 10px;\n}\n\n.lk-b {\n  display: inline-flex;\n  justify-content: center;\n  align-items: center;\n  width: 280px;\n  height: inherit;\n  /* border: 1px solid blue; */\n}\n\n.search-block {\n  /* border: 1px solid red; */\n}\n\n.user-avatar-block {\n  margin-left: 30px;\n  /* border: 1px solid yellow; */\n}\n\n.search-block input {\n  border-radius: 5px;\n \tborder-color: #27e7a1;\n}\n\n.user-avatar {\n  display: block;\n  width: 60px;\n  height: 60px;\n  background-color: #E7EAE9;\n  border-radius: 50%;\n}\n", ""]);
 
 
 
@@ -110,7 +110,7 @@ exports.push([module.i, ".header a {\r\n  text-decoration: none;\r\n  color: whi
 
 exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "* {\r\n  margin: 0px;\r\n  padding: 0px;\r\n}\r\n", ""]);
+exports.push([module.i, "* {\n  margin: 0px;\n  padding: 0px;\n}\n", ""]);
 
 
 
@@ -38027,7 +38027,7 @@ function addStyle (obj, options) {
 	// If a transform function was defined, run it on the css
 	if (options.transform && obj.css) {
 	    result = typeof options.transform === 'function'
-		 ? options.transform(obj.css)
+		 ? options.transform(obj.css) 
 		 : options.transform.default(obj.css);
 
 	    if (result) {
