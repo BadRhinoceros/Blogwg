@@ -1,26 +1,55 @@
 import React, { Component } from 'react';
-import { Route,Switch } from 'react-router-dom';
+import { FormAdd } from './components/FormAdd.js';
+import { Post } from './components/Post.js';
 
-import { Nav } from './components/Nav';
-import { FormAdd } from './components/FormAdd';
-import { Posts } from './components/Posts';
-import { FullPost } from './components/FullPost';
+const data = [
+  {
+    id: 1,
+    header: 'Это заголовок',
+    content: 'А это текст поста'
+  },
 
-import $ from 'jquery';
+  {
+    id: 2,
+    header: 'Это заголовок другого поста',
+    content: 'А это уже целый контент'
+  }
+]
 
 class App extends Component {
+  state = {
+    data: data,
+  }
+
+  renderPosts = () => {
+      const { data } = this.state;
+      let posts = null;
+
+      if (data.length) {
+        posts = data.map((item) => {
+          return(
+            <Post key={item.id} data={item}/>
+          )
+        })
+      } else {
+        posts = <p>Постов нет.</p>
+      }
+
+      return posts;
+    }
 
   render() {
     return(
-      <React.Fragment>
-        <Nav />
-        <Switch>
-          <Route exact path="/" component={ (props) => <Posts {...props}/>}/>
-          <Route path="/post_:id" component={ (props) => <FullPost {...props} /> }/>
-          <Route component={ () => <p>404</p> }/>
-        </Switch>
-        <FormAdd />
-      </React.Fragment>
+      <div>
+        <div>
+          {
+            this.renderPosts()
+          }
+        </div>
+        <div>
+          <FormAdd />
+        </div>
+      </div>
     )
   }
 }
