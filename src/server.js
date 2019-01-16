@@ -1,7 +1,6 @@
+
 const express = require('express')
 const bodyParser = require('body-parser');
-const MongoClient = require("mongodb").MongoClient;
-
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const app = express();
@@ -18,8 +17,6 @@ store.on('error', function(err){
   if (err) console.log(err)
 })
 
-const url = "mongodb://localhost:27017/";
-const mongoClient = new MongoClient(url, { useNewUrlParser: true });
 const userScheme = new Schema({
   login: String,
   password: String,
@@ -48,22 +45,13 @@ app.configure
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
 app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
   next();
 })
 
-const users = [
-  {
-    login: 'lol',
-    password: '12345',
-    email: 'qwer@gmail.com'
-  }
-];
-
-app.get('/', (req, res) => {
-  res.render('index');
-  console.log(users);
-})
 app.use(session({
   secret: 'This is a secret',
   cookie: {
@@ -83,40 +71,12 @@ app.get('/src/dist/bundle.js', (req, res) => {
   res.sendFile(__dirname + '/dist/bundle.js');
 })
 app.get('/src/dist/bundle.js.map', (req, res) => {
+  res.sendFile(__dirname + '/dist/bundle.js.map');
+})
+
 app.post('/authentication', (req, res) => {
   console.log("Авторизация открылась");
   console.log(req.body);
-  // users.forEach(user => {
-  // // if ((req.body.login == user.login) && (req.body.password == user.password)){
-  // //   console.log("Авторизован");
-  // // }
-
-
-  // });
-  mongoClient.connect(function(err, client){
-    const db = client.db("blog");
-    const collection = db.collection("Users");
-    let user = {login: req.body.login,
-                password: req.body.password};
-    if (err) return console.log(err);
-    collection.find().toArray(function(err, results){
-      // console.log(findUser);
-      console.log(results);
-      client.close();
-      results.forEach(user => {
-        if ((user.name == req.body.login) && (user.password == req.body.password)){
-          console.log("OK");
-          res.send({signed: true});
-        }
-        else{
-          res.send({signed: false})
-        }
-
-      });
-    })
-
-  })
-
   userModel.find({login: req.body.login,
              password: req.body.password}, function(err,docs){
                mongoose.disconnect();
@@ -133,21 +93,6 @@ app.post('/authentication', (req, res) => {
 
 app.post('/registration', (req, res) => {
   console.log(req.body);
-  mongoClient.connect(function(err, client){
-    const db = client.db("blog");
-    const collection = db.collection("Users");
-    let user = {name: req.body.login,
-                password: req.body.password,
-                email: req.body.email};
-    collection.insertOne(user, function(err, result){
-        if(err){
-            return console.log(err);
-        }
-        console.log(result.ops);
-        client.close();
-    });
-  });
-  console.log(users);
   const User = new userModel({
     login: req.body.login,
     password: req.body.password,
@@ -180,12 +125,12 @@ app.post('/addPost', (req, res) => {
 
 app.get('/getPosts', (req, res) => {
   // res.send(posts);
-  console.log(db.Post);
+  // console.log(db.Post);
   postModel.find( {},function(err,docs){
       mongoose.disconnect();
       if (err) return console.log(err)
-      res.send(Post);
-      console.log(Post)
+      res.send(postModel);
+      console.log(postModel)
     })
 })
 
@@ -194,5 +139,4 @@ app.get('/*', (req, res) => {  // Чекать сессию тут нужно, �
 })
 app.listen(process.env.PORT || 3000, () => {
   console.log('Сервер запущен');
-})
 })
