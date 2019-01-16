@@ -125,12 +125,12 @@ app.post('/addPost', (req, res) => {
 
 app.get('/getPosts', (req, res) => {
   // res.send(posts);
-  // console.log(db.Post);
+  console.log(db.Post);
   postModel.find( {},function(err,docs){
       mongoose.disconnect();
       if (err) return console.log(err)
-      res.send(postModel);
-      console.log(postModel)
+      res.send(Post);
+      console.log(Post)
     })
 })
 
