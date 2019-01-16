@@ -53,6 +53,7 @@ app.post('/authentication', (req, res) => {
   })
 })
 
+
 app.post('/registration', (req, res) => {
   console.log(req.body);
   console.log(`${req.body.login} ${req.body.password}`);
