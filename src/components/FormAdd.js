@@ -12,7 +12,7 @@ class FormAdd extends Component {
     isLoading: false,
   }
 
-  componentWillMount = () => {
+  componentWillMount = () => { // добавить это в App, так будет лучше. А profile и authorized передавать через props
     this.setState({isLoading: true});
     $.ajax({
       url: '/checkSession',
@@ -65,9 +65,11 @@ class FormAdd extends Component {
           if (res.authorized) {
             this.setState({ authorized: true, profileName: res.profileName });
             console.log('Успешная авторизация');
+            this.props.onFormAction({authorized: true, profileName: res.profileName});
           } else {
             this.setState({ authorized: false });
             alert('Введены неверные данные');
+            this.props.onFormAction({authorized: false, profileName: ''});
             console.log('Вход не произведен');
           }
         }
@@ -84,7 +86,8 @@ class FormAdd extends Component {
       success: (res) => {
         this.setState({ authorized: false });
       }
-    })
+    });
+    this.props.onFormAction({authorized: false, profileName: ''});
   }
 
   render() {
@@ -106,8 +109,8 @@ class FormAdd extends Component {
     } else if (authorizationForm) {
       return( //авторизация
         <form>
-          <input onChange={this.onInputChange} id="login" placeholder="login"/><br/>
-          <input onChange={this.onInputChange} id="password" placeholder="password"/><br/>
+          <input type="text" onChange={this.onInputChange} id="login" placeholder="login"/><br/>
+          <input type="password" onChange={this.onInputChange} id="password" placeholder="password"/><br/>
           <button onClick={this.onLoginBtnClick}>Войти</button>
           <button onClick={this.onFormModeHandle}>Зарегестрироваться</button>
           </form>
@@ -115,99 +118,15 @@ class FormAdd extends Component {
     } else {
       return(
         <form>
-        <input onChange={this.onInputChange} id="login" placeholder="login"/><br/>
-        <input onChange={this.onInputChange} id="password" placeholder="password"/><br/>
-        <input onChange={this.onInputChange} id="email" placeholder="email"/><br/>
+        <input type="text" onChange={this.onInputChange} id="login" placeholder="login"/><br/>
+        <input type="password" onChange={this.onInputChange} id="password" placeholder="password"/><br/>
+        <input type="text" onChange={this.onInputChange} id="email" placeholder="email"/><br/>
         <button onClick={this.onSignInBtnClick}>Зарегестрироваться</button>
         <button onClick={this.onFormModeHandle}>Есть аккаунт? Войти</button>
         </form>
       )
     }
   }
-
-  /*state = {
-    login: '',
-    password: '',
-    email: '',
-    gender: '',
-    aut: true,
-    signed: false,
-  }*/
-
-  /*onInputChange = (e) => {
-    const { id,value } = e.currentTarget;
-    this.setState({ [id]: value });
-  }
-
-  onAutBtnClick = (e) => {
-    e.preventDefault();
-    const { login,password } = this.state;
-    $.ajax({
-      url: "/authentication",
-      type: 'POST',
-      data: {
-        login: login,
-        password: password,
-      },
-      success: (res) => {
-        console.log(res);
-        if (res.signed) {
-          this.setState({signed: res.signed});
-        }
-      }
-    })
-  }
-
-  onRegBtnClick = (e) => {
-    e.preventDefault();
-    const { login,password,email } = this.state;
-    $.ajax({
-      url: "/registration",
-      type: 'POST',
-      data: {
-        login: login,
-        password: password,
-        email: email,
-      },
-      success: (res) => {
-        console.log(res);
-      }
-    })
-  }
-
-  onRegAutBtnClick = (e) => {
-    e.preventDefault();
-    this.setState({ aut: !this.state.aut });
-  }*/
-
-  /*render() {
-    const { login,password,email,gender,aut,signed } = this.state;
-      if (signed) {
-        return (
-          <div>
-            <p>Привет, {login}.</p>
-            <button>Выйти</button>
-          </div>
-        )
-    } else if (aut) {
-      return(
-        <form>
-          <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
-          <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
-          <button onClick={this.onAutBtnClick}>Войти</button><button onClick={this.onRegAutBtnClick}>Зарегестрироваться</button>
-        </form>
-      )
-    } else if (!aut) {
-      return(
-      <form>
-        <input onChange={this.onInputChange} id="login" placeholder="login" value={login} /><br/>
-        <input onChange={this.onInputChange} id="password" type="password" placeholder="password" value={password} /><br/>
-        <input onChange={this.onInputChange} id="email" placeholder="email" value={email} /><br/>
-        <button onClick={this.onRegBtnClick}>Зарегистрироваться</button><button onClick={this.onRegAutBtnClick}>Есть аккаунт? Войти</button>
-      </form>
-    )
-  }
-}*/
 }
 
 export { FormAdd }

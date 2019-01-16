@@ -5,6 +5,7 @@ class FullPost extends Component {
   state = {
     header: '',
     content: '',
+    tags: [],
     notFound: false,
   }
 
@@ -19,14 +20,14 @@ class FullPost extends Component {
         if (res.notFound) {
           this.setState({ notFound: true });
         } else {
-          this.setState({header: res.header, content: res.content});
+          this.setState({header: res.header, content: res.content, tags: res.tags});
         }
       }
     })
   }
 
   render() {
-    const { header,content,notFound } = this.state;
+    const { header,content,notFound,tags} = this.state;
 
     if (notFound) {
       return(
@@ -36,7 +37,7 @@ class FullPost extends Component {
       )
     } else {
       return(
-        <div>
+        <div className="post-block">
           <h3>{header}</h3>
           <p>{content}</p>
         </div>

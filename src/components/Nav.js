@@ -1,10 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import $ from 'jquery';
+
 import '../styles/header.css';
 
 class Nav extends Component {
+  state = {
+    authorized: false,
+  }
+
+  /*componentWillMount = () => {
+    $.ajax({
+      url: '/checkSession',
+      type: 'GET',
+      success: (res) => {
+        if (res.authorized) {
+          this.setState({ authorized: true });
+        } else {
+          this.setState({ authorized: false });
+        }
+      }
+    })
+  }*/
+
   render() {
+    const { authorized } = this.props;
     return(
       <header className="header">
         <div className="header-content">
@@ -22,7 +43,7 @@ class Nav extends Component {
               <input type="text"placeholder="Поиск"/>
             </div>
             <div className="user-avatar-block">
-              <div className="user-avatar"></div>
+              { authorized ? <Link to="/profile"><div className="user-avatar"></div></Link> : <div className="user-avatar"></div> }
             </div>
           </div>
         </div>
