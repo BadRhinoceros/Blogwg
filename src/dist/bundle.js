@@ -38523,6 +38523,14 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "deletePostHandle", function (id) {
       console.log("В App поступил запрос на удаление поста c id:" + id);
+      jquery__WEBPACK_IMPORTED_MODULE_7___default.a.ajax({
+        url: '/deletePost',
+        type: 'POST',
+        data: {
+          postId: id
+        },
+        success: function success(res) {}
+      });
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentDidMount", function () {
@@ -39079,6 +39087,26 @@ function (_Component) {
       notFound: false
     });
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "transformTagsArr", function () {
+      var tags = _this.state.tags;
+      var tagsTemplate = null,
+          i = 0;
+
+      if (tags.length) {
+        tagsTemplate = tags.map(function (item, i) {
+          i++;
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            className: "tag",
+            key: +new Date() + i
+          }, item);
+        });
+      } else {
+        tagsTemplate = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0411\u0435\u0437 \u0442\u0435\u0433\u043E\u0432 :(");
+      }
+
+      return tagsTemplate;
+    });
+
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentDidMount", function () {
       var id = _this.props.match.params.id;
       jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
@@ -39092,6 +39120,7 @@ function (_Component) {
           } else {
             _this.setState({
               header: res.header,
+              author: res.author,
               content: res.content,
               tags: res.tags
             });
@@ -39115,6 +39144,7 @@ function (_Component) {
     value: function render() {
       var _this$state = this.state,
           header = _this$state.header,
+          author = _this$state.author,
           content = _this$state.content,
           notFound = _this$state.notFound,
           tags = _this$state.tags;
@@ -39127,7 +39157,11 @@ function (_Component) {
           className: "post-block"
         }, userRole == 'admin' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           onClick: this.onDeletePostBtnClick
-        }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043E\u0441\u0442") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, header), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content));
+        }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043E\u0441\u0442") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, header), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0410\u0432\u0442\u043E\u0440: ", author), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "tags-block"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0422\u0435\u0433\u0438:", this.transformTagsArr())), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "comments-block"
+        }));
       }
     }
   }]);
@@ -39343,7 +39377,8 @@ function (_Component) {
       var _this$props$data = this.props.data,
           id = _this$props$data.id,
           header = _this$props$data.header,
-          content = _this$props$data.content; //const { getPostId } = this.props;
+          content = _this$props$data.content,
+          author = _this$props$data.author; //const { getPostId } = this.props;
 
       var userRole = this.props.userRole;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -39354,9 +39389,9 @@ function (_Component) {
         onClick: this.onHeaderClick
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/post_" + id
-      }, header)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, header)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0410\u0432\u0442\u043E\u0440: ", author), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tags-block"
-      }, this.transformTagsArr()));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0422\u0435\u0433\u0438:", this.transformTagsArr())));
     }
   }]);
 

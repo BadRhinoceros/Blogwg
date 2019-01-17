@@ -9,6 +9,24 @@ class FullPost extends Component {
     notFound: false,
   }
 
+  transformTagsArr = () => {
+    const { tags } = this.state;
+
+    let tagsTemplate = null, i = 0;
+    if (tags.length) {
+      tagsTemplate = tags.map((item, i) => {
+        i++;
+        return (
+          <span className="tag" key={+new Date()+i}>{item}</span>
+        )
+      })
+    } else {
+      tagsTemplate = <p>Без тегов :(</p>
+    }
+
+    return tagsTemplate;
+  }
+
   componentDidMount = () => {
     const { id } = this.props.match.params;
     $.ajax({
@@ -18,7 +36,7 @@ class FullPost extends Component {
         if (res.notFound) {
           this.setState({ notFound: true });
         } else {
-          this.setState({header: res.header, content: res.content, tags: res.tags});
+          this.setState({header: res.header, author: res.author, content: res.content, tags: res.tags});
         }
       }
     })
@@ -31,7 +49,7 @@ class FullPost extends Component {
   }
 
   render() {
-    const { header,content,notFound,tags} = this.state;
+    const { header,author,content,notFound,tags} = this.state;
     const { userRole } = this.props;
 
     if (notFound) {
@@ -47,7 +65,18 @@ class FullPost extends Component {
             userRole == 'admin' ? <button onClick={this.onDeletePostBtnClick}>Удалить пост</button> : null
           }
           <h3>{header}</h3>
+          <p>Автор: {author}</p>
           <p>{content}</p>
+          <div className="tags-block">
+            <p>Теги: 
+            {
+              this.transformTagsArr()
+            }
+            </p>
+          </div>
+          <div className="comments-block">
+
+          </div>
         </div>
       )
     }

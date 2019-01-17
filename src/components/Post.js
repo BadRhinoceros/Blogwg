@@ -34,7 +34,7 @@ class Post extends Component {
   }
 
   render() {
-    const { id,header,content } = this.props.data;
+    const { id,header,content,author } = this.props.data;
     //const { getPostId } = this.props;
     const { userRole } = this.props;
     return(
@@ -43,11 +43,14 @@ class Post extends Component {
           userRole == 'admin' ? <button onClick={this.onDeletePostBtnClick}>Удалить пост</button> : null
         }
         <h3 onClick={this.onHeaderClick}><Link to={"/post_"+id}>{header}</Link></h3>
+        <p>Автор: {author}</p>
         <p>{content}</p>
         <div className="tags-block">
+          <p>Теги: 
           {
             this.transformTagsArr()
           }
+          </p>
         </div>
       </div>
     )

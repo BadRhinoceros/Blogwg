@@ -20,6 +20,16 @@ class App extends Component {
 
   deletePostHandle = (id) => {
     console.log("В App поступил запрос на удаление поста c id:"+id);
+    $.ajax({
+      url: '/deletePost',
+      type: 'POST',
+      data: {
+        postId: id,
+      },
+      success: (res) => {
+
+      }
+    })
   }
 
   componentDidMount = () => {

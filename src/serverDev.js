@@ -3,9 +3,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const bodyParser = require('body-parser');
 
+const mongo = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const mongoClient = new MongoClient('mongodb://localhost:27017/', { useNewUrlParser: true });
-
 const app = express();
 let dbClient;
 
@@ -58,19 +58,38 @@ mongoClient.connect((err, client) => {
   });
 });
 
+app.post('/deletePost', (req, res) => {
+ console.log(req.body.postId);
+ if(req.body.postId) {
+   let postId = req.body.postId;
+   const collection = app.locals.postsCollection;
+   collection.deleteOne({_id: new mongo.ObjectId(postId)}).then(result => {
+          console.log(result);
+         return result;
+      });;
+
+   collection.find().toArray((err, result) => {
+     console.log(result);
+   })
+   console.log('Что-то произошло?');
+ }
+ res.render('index');
+});
+
 app.post('/createPost', (req, res) => {
   console.log(req.body);
   let post = {
     id: +new Date(),
     header: req.body.header,
+    author: req.session.username,
     content: req.body.subject,
     tags: req.body.tags,
   }
-  const collection = req.app.locals.postCollection;
+  const collection = req.app.locals.postsCollection;
   collection.insertOne(post, (err, result) => {
     if (err) return console.log(err);
-    //console.log(result.ops);
-    //console.log('Пост добавлен');
+    console.log(result.ops);
+    console.log('Пост добавлен');
     res.render('index.ejs');
   });
   res.render('index.ejs');
@@ -111,6 +130,7 @@ app.get(/getPostById*/, (req, res) => {
         if(postId == item._id) {
           post = {
             id: item._id,
+            author: item.author,
             header: item.header,
             content: item.content,
             tags: [item.tags],
@@ -135,6 +155,7 @@ app.get('/getPosts', (req, res) => {
     result.forEach((item) => {
       let post = {
         id: item._id,
+        author: item.author,
         header: item.header,
         content: item.content,
         tags: [item.tags],
