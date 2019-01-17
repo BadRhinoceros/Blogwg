@@ -9,7 +9,7 @@ const mongoClient = new MongoClient('mongodb://localhost:27017/', { useNewUrlPar
 const app = express();
 let dbClient;
 
-const posts = [ // Это типо в базе данных
+/*const posts = [ // Это типо в базе данных
   {
     id: 1,
     header: 'Это первый пост',
@@ -22,7 +22,7 @@ const posts = [ // Это типо в базе данных
     content: 'Ну и его контент',
     tags: ['это','просто','теги','ага'],
   },
-];
+];*/
 
 app.set('view engine', 'ejs');
 
@@ -52,6 +52,7 @@ mongoClient.connect((err, client) => {
   if (err) return console.log(err);
   dbClient = client;
   app.locals.collection = client.db('testblog').collection('users');
+  app.locals.postsCollection = client.db('testblog').collection('posts');
   app.listen(process.env.PORT || 3000, () => {
     console.log('Сервер запущен');
   });
@@ -65,12 +66,18 @@ app.post('/createPost', (req, res) => {
     content: req.body.subject,
     tags: req.body.tags,
   }
-  posts.push(post);
+  const collection = req.app.locals.postCollection;
+  collection.insertOne(post, (err, result) => {
+    if (err) return console.log(err);
+    //console.log(result.ops);
+    //console.log('Пост добавлен');
+    res.render('index.ejs');
+  });
   res.render('index.ejs');
 });
 
 app.get(/getPostById*/, (req, res) => {
-  if(req.query.id) {
+  /*if(req.query.id) {
     let postId = req.query.id;
     console.log(`ID поста = ${postId}`);
     let post;
@@ -90,49 +97,94 @@ app.get(/getPostById*/, (req, res) => {
   } else {
     console.log("Неправильный Id");
     res.redirect('/');
+  }*/
+  if(req.query.id) {
+    let postId = req.query.id;
+    console.log(`ID поста = ${postId}`);
+    const collection = app.locals.postsCollection;
+    let post;
+
+    collection.find().toArray((err, result) => {
+      if (err) return console.log(err);
+
+      result.forEach((item) => {
+        if(postId == item._id) {
+          post = {
+            id: item._id,
+            header: item.header,
+            content: item.content,
+            tags: [item.tags],
+          }
+        }
+      })
+      if (post) {
+        res.send(post);
+      } else {
+        res.send({ notFound: true });
+      }
+    })
+    console.log(post);
   }
 })
 
 app.get('/getPosts', (req, res) => {
-  res.send(posts);
+  const collection = app.locals.postsCollection;
+  let posts = [];
+  collection.find().toArray((err, result) => {
+    if (err) return console.log(err);
+    result.forEach((item) => {
+      let post = {
+        id: item._id,
+        header: item.header,
+        content: item.content,
+        tags: [item.tags],
+      }
+      posts.push(post);
+      //console.log(posts);
+    });
+    res.send(posts);
+  })
+  //res.send(posts);
 })
 
-app.post(/sign/, (req, res) => {
+app.post(/sign/, (req, res) => { // Переделать в body
   const { name,password,email } = req.query;
-  const user = { name: name, password: password, email: email, rule: 'user' };
+  const user = { name: name, password: password, email: email, role: 'user' };
 
   const collection = req.app.locals.collection;
   collection.insertOne(user, (err, result) => {
     if (err) return console.log(err);
-    console.log(result.ops);
+    //console.log(result.ops);
     console.log('Пользователь добавлен');
     res.render('index.ejs');
   });
 });
 
-app.post(/login/, (req, res) => {
+app.post(/login/, (req, res) => { // Переделать в body
   const { name,password } = req.query;
   console.log(name);
   const collection = req.app.locals.collection;
-  collection.find({name : name, password: password}, (err) => {
-    if (err) return console.log(err)
-    req.session.username=name
-    req.session.authorized=true
-  })
+  collection.find({name : name, password: password},{role: 1}, (err, result) => {
+    if (err) return console.log(err);
+    req.session.username = name;
+    req.session.authorized = true;
+  });
 
     if (req.session.authorized) {
-      res.send({ authorized: true, profileName: req.session.username});
+      collection.find({name : name, password: password}).toArray((err, result) => {
+        let userRole = result[0].role;
+        req.session.userRole = userRole;
+        res.send({ authorized: true, profileName: req.session.username, userRole: req.session.userRole});
+        console.log(req.session);
+      });
     } else {
       res.send({ authorized: false });
     }
-
-    console.log(req.session);
-  });
-
+});
 
 app.get('/checkSession', (req, res) => {
   if (req.session.authorized) {
-    res.send({ authorized: true, profileName: req.session.username});
+    res.send({ authorized: true, profileName: req.session.username, userRole: req.session.userRole});
   } else {
     res.send({ authorized: false });
   }
@@ -142,6 +194,7 @@ app.get('/checkSession', (req, res) => {
 app.get('/logout', (req, res) => {
   delete req.session.authorized;
   delete req.session.username;
+  delete req.session.userRole;
   res.send({ authorized: false });
 })
 

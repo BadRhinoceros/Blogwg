@@ -10,20 +10,6 @@ class Nav extends Component {
     authorized: false,
   }
 
-  /*componentWillMount = () => {
-    $.ajax({
-      url: '/checkSession',
-      type: 'GET',
-      success: (res) => {
-        if (res.authorized) {
-          this.setState({ authorized: true });
-        } else {
-          this.setState({ authorized: false });
-        }
-      }
-    })
-  }*/
-
   render() {
     const { authorized } = this.props;
     return(

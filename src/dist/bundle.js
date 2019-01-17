@@ -38517,7 +38517,12 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       authorized: false,
-      profileName: ''
+      profileName: '',
+      userRole: ''
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "deletePostHandle", function (id) {
+      console.log("В App поступил запрос на удаление поста c id:" + id);
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentDidMount", function () {
@@ -38526,14 +38531,18 @@ function (_Component) {
         type: 'GET',
         success: function success(res) {
           if (res.authorized) {
+            console.log('Авторизован');
+
             _this.setState({
               authorized: true,
-              profileName: res.profileName
+              profileName: res.profileName,
+              userRole: res.userRole
             });
           } else {
             _this.setState({
               authorized: false,
-              profileName: ''
+              profileName: '',
+              userRole: ''
             });
           }
         }
@@ -38543,7 +38552,8 @@ function (_Component) {
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onFormActionHandle", function (result) {
       _this.setState({
         authorized: result.authorized,
-        profileName: result.profileName
+        profileName: result.profileName,
+        userRole: result.userRole
       });
     });
 
@@ -38553,9 +38563,12 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var _this$state = this.state,
           authorized = _this$state.authorized,
-          profileName = _this$state.profileName; // Придумать что-то лучше текущего вывода лк
+          profileName = _this$state.profileName,
+          userRole = _this$state.userRole; // Придумать что-то лучше текущего вывода лк
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Nav__WEBPACK_IMPORTED_MODULE_2__["Nav"], {
         authorized: authorized
@@ -38567,12 +38580,18 @@ function (_Component) {
         exact: true,
         path: "/",
         component: function component(props) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Posts__WEBPACK_IMPORTED_MODULE_4__["Posts"], props);
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Posts__WEBPACK_IMPORTED_MODULE_4__["Posts"], _extends({}, props, {
+            userRole: userRole,
+            deletePostHandle: _this2.deletePostHandle
+          }));
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
         path: "/post_:id",
         component: function component(props) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_FullPost__WEBPACK_IMPORTED_MODULE_5__["FullPost"], props);
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_FullPost__WEBPACK_IMPORTED_MODULE_5__["FullPost"], _extends({}, props, {
+            userRole: userRole,
+            onDeletePost: _this2.deletePostHandle
+          }));
         }
       }), authorized ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
         path: "/profile",
@@ -38885,7 +38904,8 @@ function (_Component) {
 
               _this.props.onFormAction({
                 authorized: true,
-                profileName: res.profileName
+                profileName: res.profileName,
+                userRole: res.userRole
               });
             } else {
               _this.setState({
@@ -38914,14 +38934,15 @@ function (_Component) {
         type: 'GET',
         success: function success(res) {
           _this.setState({
-            authorized: false
+            authorized: res.authorized
           });
         }
       });
 
       _this.props.onFormAction({
         authorized: false,
-        profileName: ''
+        profileName: '',
+        userRole: ''
       });
     });
 
@@ -39060,13 +39081,10 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentDidMount", function () {
       var id = _this.props.match.params.id;
-      console.log(id);
       jquery__WEBPACK_IMPORTED_MODULE_1___default.a.ajax({
         url: "/getPostById?id=".concat(id),
         type: 'GET',
         success: function success(res) {
-          console.log(res);
-
           if (res.notFound) {
             _this.setState({
               notFound: true
@@ -39082,6 +39100,13 @@ function (_Component) {
       });
     });
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onDeletePostBtnClick", function () {
+      var id = _this.props.match.params.id;
+      console.log('Админ хочет удалить пост с id:' + id);
+
+      _this.props.onDeletePost(id);
+    });
+
     return _this;
   }
 
@@ -39093,13 +39118,16 @@ function (_Component) {
           content = _this$state.content,
           notFound = _this$state.notFound,
           tags = _this$state.tags;
+      var userRole = this.props.userRole;
 
       if (notFound) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0422\u0430\u043A\u043E\u0433\u043E \u043F\u043E\u0441\u0442\u0430 \u043D\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442"));
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "post-block"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, header), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content));
+        }, userRole == 'admin' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: this.onDeletePostBtnClick
+        }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043E\u0441\u0442") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, header), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, content));
       }
     }
   }]);
@@ -39173,20 +39201,6 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       authorized: false
-      /*componentWillMount = () => {
-        $.ajax({
-          url: '/checkSession',
-          type: 'GET',
-          success: (res) => {
-            if (res.authorized) {
-              this.setState({ authorized: true });
-            } else {
-              this.setState({ authorized: false });
-            }
-          }
-        })
-      }*/
-
     });
 
     return _this;
@@ -39288,11 +39302,6 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Post)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onHeaderClick", function () {
-      var id = _this.props.data.id;
-      console.log("\u041D\u0430\u0436\u0430\u0442\u0438\u0435 \u043D\u0430 \u043F\u043E\u0441\u0442 \u0441 ID = ".concat(id));
-    });
-
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "transformTagsArr", function () {
       var tags = _this.props.data.tags;
       var tagsTemplate = null,
@@ -39313,6 +39322,18 @@ function (_Component) {
       return tagsTemplate;
     });
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onHeaderClick", function () {
+      var id = _this.props.data.id;
+      console.log("\u041D\u0430\u0436\u0430\u0442\u0438\u0435 \u043D\u0430 \u043F\u043E\u0441\u0442 \u0441 ID = ".concat(id));
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onDeletePostBtnClick", function () {
+      var id = _this.props.data.id;
+      console.log('Админ хочет удалить пост с id:' + id);
+
+      _this.props.onDeletePost(id);
+    });
+
     return _this;
   }
 
@@ -39322,11 +39343,14 @@ function (_Component) {
       var _this$props$data = this.props.data,
           id = _this$props$data.id,
           header = _this$props$data.header,
-          content = _this$props$data.content;
-      var getPostId = this.props.getPostId;
+          content = _this$props$data.content; //const { getPostId } = this.props;
+
+      var userRole = this.props.userRole;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "post-block"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      }, userRole == 'admin' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.onDeletePostBtnClick
+      }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043E\u0441\u0442") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         onClick: this.onHeaderClick
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/post_" + id
@@ -39404,7 +39428,7 @@ function (_Component) {
       data: ''
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentWillMount", function () {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "componentDidMount", function () {
       jquery__WEBPACK_IMPORTED_MODULE_2___default.a.ajax({
         url: '/getPosts',
         type: 'GET',
@@ -39418,15 +39442,20 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderPosts", function () {
-      var data = _this.state.data;
-      var getPostId = _this.props.getPostId;
+      var data = _this.state.data; //const { getPostId } = this.props;
+
+      var _this$props = _this.props,
+          userRole = _this$props.userRole,
+          deletePostHandle = _this$props.deletePostHandle;
       var posts = null;
 
       if (data.length) {
         posts = data.map(function (item) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Post__WEBPACK_IMPORTED_MODULE_1__["Post"], {
             key: item.id,
-            data: item
+            data: item,
+            userRole: userRole,
+            onDeletePost: deletePostHandle
           });
         });
       } else {

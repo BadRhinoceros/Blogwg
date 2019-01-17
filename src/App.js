@@ -15,6 +15,11 @@ class App extends Component {
   state = {
     authorized: false,
     profileName: '',
+    userRole: '',
+  }
+
+  deletePostHandle = (id) => {
+    console.log("В App поступил запрос на удаление поста c id:"+id);
   }
 
   componentDidMount = () => {
@@ -23,30 +28,31 @@ class App extends Component {
       type: 'GET',
       success: (res) => {
         if (res.authorized) {
-          this.setState({ authorized: true, profileName: res.profileName });
+          console.log('Авторизован');
+          this.setState({ authorized: true, profileName: res.profileName, userRole: res.userRole });
         } else {
-          this.setState({ authorized: false, profileName: '' });
+          this.setState({ authorized: false, profileName: '', userRole: '' });
         }
       }
     })
   }
 
   onFormActionHandle = (result) => {
-    this.setState({ authorized: result.authorized, profileName: result.profileName });
+    this.setState({ authorized: result.authorized, profileName: result.profileName, userRole: result.userRole });
   }
 
   render() {
-    const { authorized,profileName } = this.state; // Придумать что-то лучше текущего вывода лк
+    const { authorized,profileName,userRole } = this.state; // Придумать что-то лучше текущего вывода лк
     return(
       <React.Fragment>
         <Nav authorized={authorized} />
         <div className="main-content">
           <div className="feed">
             <Switch>
-              <Route exact path="/" component={ (props) => <Posts {...props}/>}/>
-              <Route path="/post_:id" component={ (props) => <FullPost {...props}/>}/>
+              <Route exact path="/" component={ (props) => <Posts {...props} userRole={userRole} deletePostHandle={this.deletePostHandle}/> }/>
+              <Route path="/post_:id" component={ (props) => <FullPost {...props} userRole={userRole} onDeletePost={this.deletePostHandle}/> }/>
               {
-                authorized ? <Route path="/profile" component={ (props) => <UserProfile {...props} profileName={profileName}/>}/> : null
+                authorized ? <Route path="/profile" component={ (props) => <UserProfile {...props} profileName={profileName}/> }/> : null
               }
               <Route component={ () => <p>404</p> }/>
             </Switch>

@@ -11,12 +11,10 @@ class FullPost extends Component {
 
   componentDidMount = () => {
     const { id } = this.props.match.params;
-    console.log(id);
     $.ajax({
       url:`/getPostById?id=${id}`,
       type: 'GET',
       success: (res) => {
-        console.log(res);
         if (res.notFound) {
           this.setState({ notFound: true });
         } else {
@@ -26,8 +24,15 @@ class FullPost extends Component {
     })
   }
 
+  onDeletePostBtnClick = () => {
+    const { id } = this.props.match.params;
+    console.log('Админ хочет удалить пост с id:'+id);
+    this.props.onDeletePost(id);
+  }
+
   render() {
     const { header,content,notFound,tags} = this.state;
+    const { userRole } = this.props;
 
     if (notFound) {
       return(
@@ -38,6 +43,9 @@ class FullPost extends Component {
     } else {
       return(
         <div className="post-block">
+          {
+            userRole == 'admin' ? <button onClick={this.onDeletePostBtnClick}>Удалить пост</button> : null
+          }
           <h3>{header}</h3>
           <p>{content}</p>
         </div>

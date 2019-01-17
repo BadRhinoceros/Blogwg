@@ -65,7 +65,7 @@ class FormAdd extends Component {
           if (res.authorized) {
             this.setState({ authorized: true, profileName: res.profileName });
             console.log('Успешная авторизация');
-            this.props.onFormAction({authorized: true, profileName: res.profileName});
+            this.props.onFormAction({authorized: true, profileName: res.profileName, userRole: res.userRole});
           } else {
             this.setState({ authorized: false });
             alert('Введены неверные данные');
@@ -84,10 +84,10 @@ class FormAdd extends Component {
       url: '/logout',
       type: 'GET',
       success: (res) => {
-        this.setState({ authorized: false });
+        this.setState({ authorized: res.authorized });
       }
     });
-    this.props.onFormAction({authorized: false, profileName: ''});
+    this.props.onFormAction({authorized: false, profileName: '', userRole: ''});
   }
 
   render() {

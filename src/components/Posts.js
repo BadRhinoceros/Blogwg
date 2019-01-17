@@ -7,26 +7,27 @@ class Posts extends Component {
     data: '',
   }
 
-  componentWillMount = () => {
-    $.ajax({
-      url:'/getPosts',
-      type:'GET',
-      success: (res) => {
-        //console.log(res);
-        this.setState({data: res});
-      }
-    })
+  componentDidMount = () => {
+      $.ajax({
+        url:'/getPosts',
+        type:'GET',
+        success: (res) => {
+          //console.log(res);
+          this.setState({data: res});
+        }
+      })
   }
 
   renderPosts = () => {
     const { data } = this.state;
-    const { getPostId } = this.props;
+    //const { getPostId } = this.props;
+    const { userRole,deletePostHandle } = this.props;
     let posts = null;
 
     if (data.length) {
       posts = data.map((item) => {
         return(
-          <Post key={item.id} data={item} />
+          <Post key={item.id} data={item} userRole={userRole} onDeletePost={deletePostHandle}/>
         )
       })
     } else {

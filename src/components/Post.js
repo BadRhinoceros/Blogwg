@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 
 class Post extends Component {
 
-  onHeaderClick= () => {
-    const { id } = this.props.data;
-    console.log(`Нажатие на пост с ID = ${id}`);
-  }
 
   transformTagsArr = () => {
     const { tags } = this.props.data;
@@ -26,11 +22,26 @@ class Post extends Component {
     return tagsTemplate;
   }
 
+  onHeaderClick= () => {
+    const { id } = this.props.data;
+    console.log(`Нажатие на пост с ID = ${id}`);
+  }
+
+  onDeletePostBtnClick = () => {
+    const { id } = this.props.data;
+    console.log('Админ хочет удалить пост с id:'+id);
+    this.props.onDeletePost(id);
+  }
+
   render() {
     const { id,header,content } = this.props.data;
-    const { getPostId } = this.props;
+    //const { getPostId } = this.props;
+    const { userRole } = this.props;
     return(
       <div className="post-block">
+        {
+          userRole == 'admin' ? <button onClick={this.onDeletePostBtnClick}>Удалить пост</button> : null
+        }
         <h3 onClick={this.onHeaderClick}><Link to={"/post_"+id}>{header}</Link></h3>
         <p>{content}</p>
         <div className="tags-block">
