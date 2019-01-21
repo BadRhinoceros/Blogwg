@@ -8,6 +8,13 @@ import '../styles/header.css';
 class Nav extends Component {
   state = {
     authorized: false,
+    searchBarText: '',
+  }
+
+  onInputChange = (e) => {
+    const { id,value } = e.currentTarget;
+    this.setState({ [id]: value });
+    this.props.onChangeSearchBar(value);
   }
 
   render() {
@@ -26,7 +33,7 @@ class Nav extends Component {
           </nav>
           <div className="lk-b">
             <div className="search-block">
-              <input type="text"placeholder="Поиск"/>
+              <input onChange={this.onInputChange} id="searchBarText" type="text"placeholder="Поиск"/>
             </div>
             <div className="user-avatar-block">
               { authorized ? <Link to="/profile"><div className="user-avatar"></div></Link> : <div className="user-avatar"></div> }

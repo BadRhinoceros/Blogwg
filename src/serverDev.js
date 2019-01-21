@@ -9,25 +9,10 @@ const mongoClient = new MongoClient('mongodb://localhost:27017/', { useNewUrlPar
 const app = express();
 let dbClient;
 
-/*const posts = [ // Это типо в базе данных
-  {
-    id: 1,
-    header: 'Это первый пост',
-    content: 'Это контент первого поста',
-    tags: ['это','просто','теги','ага'],
-  },
-  {
-    id: 2,
-    header: 'Ну а это уже второй пост',
-    content: 'Ну и его контент',
-    tags: ['это','просто','теги','ага'],
-  },
-];*/
-
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static('public/images'));
 
 app.use(session({
   secret: 'mySecret',
@@ -58,20 +43,93 @@ mongoClient.connect((err, client) => {
   });
 });
 
+app.post('/fingPost', (req,res) => {
+  if (req.body.postHeader) {
+    const collection = app.locals.postsCollection;
+    let posts = [];
+    collection.find({header: req.body.postHeader}).toArray((err, result) => {
+      if (err) return console.log(err);
+      result.forEach((item) => {
+        let post = {
+          id: item._id,
+          author: item.author,
+          header: item.header,
+          content: item.content,
+          tags: item.tags,
+        }
+        posts.push(post);
+      });
+      res.send(posts);
+    })
+  }
+})
+
+app.post('/deleteLike', (req,res) => {
+  let postId = req.body.postId;
+  if (postId) {
+    const collection = app.locals.postsCollection;
+    collection.updateOne({_id: new mongo.ObjectId(postId)}, {$pull: { likes: new mongo.ObjectId(req.session.userId) }})
+    res.send({isLiked: false});
+  }
+})
+
+app.post('/addLike', (req,res) => {
+  let postId = req.body.postId;
+  if (postId) {
+    const collection = app.locals.postsCollection;
+    collection.updateOne({_id: new mongo.ObjectId(postId)}, {$push: { likes: new mongo.ObjectId(req.session.userId) }})
+    res.send({isLiked: true});
+  }
+})
+
+app.post('/getPostLikes', (req, res) => {
+  let postId = req.body.postId;
+  if (postId) {
+    const collection = app.locals.postsCollection;
+    collection.find({_id: new mongo.ObjectId(postId)}).toArray((err, result) => {
+      if (err) return console.log(err);
+      result.forEach((item) => {
+        console.log(item.likes.length);
+        res.send({numberOfLikes: item.likes.length});
+      })
+    })
+  }
+})
+
+app.post('/checkLike', (req, res) => {
+  let postId = req.body.postId;
+  if (postId) {
+    const collection = app.locals.postsCollection;
+    collection.find({_id: new mongo.ObjectId(postId), likes: new mongo.ObjectId(req.session.userId)}).toArray((err, result) => {
+      if (err) return console.log(err);
+      if (result.length) {
+        res.send(true);
+      } else {
+        res.send(false);
+      }
+    })
+  }
+})
+
+app.post('/addComment', (req, res) => {
+  const { postId,text } = req.body;
+  if (postId && req.session.username) {
+    console.log(`К посту с id:${postId} добавить комментарий с текстом:${text}`);
+    const collection = app.locals.postsCollection;
+    collection.updateOne({_id: new mongo.ObjectId(postId)}, {$push: { comments: {_id: new mongo.ObjectId(), name: req.session.username, text:text } }})
+  }
+  res.render('index');
+})
+
 app.post('/deletePost', (req, res) => {
  console.log(req.body.postId);
  if(req.body.postId) {
    let postId = req.body.postId;
    const collection = app.locals.postsCollection;
-   collection.deleteOne({_id: new mongo.ObjectId(postId)}).then(result => {
-          console.log(result);
-         return result;
-      });;
-
-   collection.find().toArray((err, result) => {
-     console.log(result);
-   })
-   console.log('Что-то произошло?');
+   collection.deleteOne({_id: new mongo.ObjectId(postId)})
+    .then(result => {
+        return result;
+    })
  }
  res.render('index');
 });
@@ -84,39 +142,19 @@ app.post('/createPost', (req, res) => {
     author: req.session.username,
     content: req.body.subject,
     tags: req.body.tags,
+    likes: [],
+    comments: [],
   }
   const collection = req.app.locals.postsCollection;
   collection.insertOne(post, (err, result) => {
     if (err) return console.log(err);
     console.log(result.ops);
     console.log('Пост добавлен');
-    res.render('index.ejs');
+    res.render('index');
   });
-  res.render('index.ejs');
 });
 
 app.get(/getPostById*/, (req, res) => {
-  /*if(req.query.id) {
-    let postId = req.query.id;
-    console.log(`ID поста = ${postId}`);
-    let post;
-
-    posts.forEach((item) => {
-      if(postId == item.id) {
-        post = item;
-      }
-    })
-
-    if (post) {
-      res.send(post);
-    } else {
-      res.send({ notFound: true});
-    }
-
-  } else {
-    console.log("Неправильный Id");
-    res.redirect('/');
-  }*/
   if(req.query.id) {
     let postId = req.query.id;
     console.log(`ID поста = ${postId}`);
@@ -133,7 +171,8 @@ app.get(/getPostById*/, (req, res) => {
             author: item.author,
             header: item.header,
             content: item.content,
-            tags: [item.tags],
+            tags: item.tags,
+            comments: item.comments,
           }
         }
       })
@@ -158,30 +197,27 @@ app.get('/getPosts', (req, res) => {
         author: item.author,
         header: item.header,
         content: item.content,
-        tags: [item.tags],
+        tags: item.tags,
       }
       posts.push(post);
-      //console.log(posts);
     });
     res.send(posts);
   })
-  //res.send(posts);
 })
 
-app.post(/sign/, (req, res) => { // Переделать в body
+app.post(/sign/, (req, res) => {
   const { name,password,email } = req.query;
   const user = { name: name, password: password, email: email, role: 'user' };
 
   const collection = req.app.locals.collection;
   collection.insertOne(user, (err, result) => {
     if (err) return console.log(err);
-    //console.log(result.ops);
     console.log('Пользователь добавлен');
     res.render('index.ejs');
   });
 });
 
-app.post(/login/, (req, res) => { // Переделать в body
+app.post(/login/, (req, res) => {
   const { name,password } = req.query;
   console.log(name);
   const collection = req.app.locals.collection;
@@ -193,7 +229,9 @@ app.post(/login/, (req, res) => { // Переделать в body
 
     if (req.session.authorized) {
       collection.find({name : name, password: password}).toArray((err, result) => {
+        let userId = result[0]._id;
         let userRole = result[0].role;
+        req.session.userId = userId;
         req.session.userRole = userRole;
         res.send({ authorized: true, profileName: req.session.username, userRole: req.session.userRole});
         console.log(req.session);
@@ -216,6 +254,7 @@ app.get('/logout', (req, res) => {
   delete req.session.authorized;
   delete req.session.username;
   delete req.session.userRole;
+  delete req.session.userId;
   res.send({ authorized: false });
 })
 

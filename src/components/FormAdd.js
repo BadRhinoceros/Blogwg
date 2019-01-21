@@ -95,34 +95,34 @@ class FormAdd extends Component {
 
     if (isLoading) {
       return(
-        <div>
+        <div className="form-reg">
           <p>Загрузка...</p>
         </div>
       )
     } else if (authorized) {
       return(
-        <div>
+        <div className="form-reg">
           <p>Привет, {profileName}</p>
-          <button onClick={this.onLogoutBtnClick}>Выйти</button>
+          <button onClick={this.onLogoutBtnClick} className="form-button">Выйти</button>
         </div>
       )
     } else if (authorizationForm) {
-      return( //авторизация
-        <form>
+      return(
+        <form className="form-reg">
           <input type="text" onChange={this.onInputChange} id="login" placeholder="login"/><br/>
           <input type="password" onChange={this.onInputChange} id="password" placeholder="password"/><br/>
-          <button onClick={this.onLoginBtnClick}>Войти</button>
-          <button onClick={this.onFormModeHandle}>Зарегестрироваться</button>
-          </form>
+          <button onClick={this.onLoginBtnClick} className="form-button">Войти</button>
+          <button onClick={this.onFormModeHandle} className="form-button">Зарегестрироваться</button>
+        </form>
       )
     } else {
       return(
-        <form>
-        <input type="text" onChange={this.onInputChange} id="login" placeholder="login"/><br/>
-        <input type="password" onChange={this.onInputChange} id="password" placeholder="password"/><br/>
-        <input type="text" onChange={this.onInputChange} id="email" placeholder="email"/><br/>
-        <button onClick={this.onSignInBtnClick}>Зарегестрироваться</button>
-        <button onClick={this.onFormModeHandle}>Есть аккаунт? Войти</button>
+        <form className="form-reg">
+          <input type="text" onChange={this.onInputChange} id="login" placeholder="login"/><br/>
+          <input type="password" onChange={this.onInputChange} id="password" placeholder="password"/><br/>
+          <input type="text" onChange={this.onInputChange} id="email" placeholder="email"/><br/>
+          <button onClick={this.onSignInBtnClick} className="form-button">Зарегестрироваться</button>
+          <button onClick={this.onFormModeHandle} className="form-button">Есть аккаунт?</button>
         </form>
       )
     }

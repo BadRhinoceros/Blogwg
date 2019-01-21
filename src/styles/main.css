@@ -20,6 +20,21 @@
   padding: 5px;
   margin-top: 30px;
   background-color: white;
+  border-radius: 10px;
+  width: 742px;
+  background-color: white;
+  color: #b0b0b0;
+  font-family: 'Aleo', serif;
+  /* border: 1px solid black; */
+}
+
+.post-block h3 {
+  padding-bottom: 10px;
+}
+
+.post-block .content-block {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .post-block:first-child {
@@ -37,4 +52,95 @@
 .registr {
   height: 250px;
   width: 200px;
+  background-color: #27e7a1;
+}
+
+.form-reg {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.form-reg input {
+  width: 140px;
+  height: 30px;
+  background-color: white;
+  border-radius: 5%;
+}
+
+.form-button {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 5%;
+  width: 60%;
+  height: 30px;
+  background-color: white;
+  color: #b0b0b0;
+  font-family: 'Aleo', serif;
+}
+
+.commenting-block textarea {
+  width: 100%;
+  resize: none;
+}
+
+::-webkit-input-placeholder {
+text-align:center;
+}
+
+.addLike {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: none;
+}
+
+.deleteLike {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: none;
+}
+
+.info-block {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+}
+
+.tags-block {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.comments-block {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.comment {
+  padding-bottom: 10px;
+}
+
+.comment:last-child {
+  padding-bottom: 0;
+}
+
+.userProfile-block {
+  width: 100%;
+  background-color: white;
+  padding: 10px;
 }

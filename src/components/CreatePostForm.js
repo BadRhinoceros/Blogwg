@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { PostContentEditor } from './PostContentEditor';
+
 import $ from 'jquery';
 
 class CreatePostForm extends Component {
@@ -10,18 +12,23 @@ class CreatePostForm extends Component {
     tags: '',
   }
 
+  onContentChangeHandle = (htmlContent) => {
+    this.setState({content: htmlContent});
+  }
+
+  onSendPost = (result) => {
+    console.log(result);
+  }
+
   onInputChange = (e) => {
     const { id,value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
   onClickCreatePostBtn = (e) => {
-    e.preventDefault();
     const {header,content,tags} = this.state;
     if (header && content.trim() && tags.trim()) {
-
       let tagsArr = tags.split(' ');
-
       $.ajax({
         url: '/createPost',
         type: 'POST',
@@ -31,6 +38,10 @@ class CreatePostForm extends Component {
             tags: tagsArr,
         }
       });
+      alert('Пост опубликован');
+    } else {
+      e.preventDefault();
+      alert('все поля должны быть заполнены');
     }
   }
 
@@ -39,12 +50,13 @@ class CreatePostForm extends Component {
     this.props.onClickBackButton();
   }
 
+
   render() {
     const {header,content,tags} = this.state;
     return(
       <form>
         <input onChange={this.onInputChange} id="header" placeholder="Заголовок поста" value={header} /><br/>
-        <textarea onChange={this.onInputChange} id="content" placeholder="Текст поста" value={content} ></textarea><br/>
+        <PostContentEditor onContentChange={this.onContentChangeHandle} />
         <input onChange={this.onInputChange} id="tags" placeholder="Теги поста через пробел" value={tags} /><br/>
         <button onClick={this.onClickCreatePostBtn}>Добавить пост</button>
         <button onClick={this.onBackClick}>Выйти</button>
